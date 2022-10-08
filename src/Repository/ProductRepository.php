@@ -42,20 +42,35 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @return Product[]
      */
-    public function findAllPriceInRange(int $minPrice, int $maxPrice): array
+    public function findAllPriceInRange(int $minPrice, int $maxPrice, int $cat): array
     {
         $entityManager = $this->getEntityManager();
 
-        $query = $entityManager->createQuery(
-            'SELECT p
-            FROM App\Entity\Product p
-            WHERE p.Price >= :minP AND p.Price <= :maxP
-            ORDER BY p.Price ASC'
-        )->setParameter('minP', $minPrice)
-            ->setParameter('maxP', $maxPrice);
-
+        // $query = $entityManager->createQuery(
+        //     'SELECT p
+        //     FROM App\Entity\Product p
+        //     WHERE p.Category = :Category AND p.Price >= :minP AND p.Price <= :maxP
+        //     ORDER BY p.Price ASC'
+        // )->setParameter('minP', $minPrice)
+        //     ->setParameter('maxP', $maxPrice)
+        //     ->setParameter('Category', $cat);
         // returns an array of Product objects
-        return $query->getResult();
+        // return $query->getResult();
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('p')
+            ->from('App\Entity\Product', 'p');
+        if (is_null($minPrice)) {
+            $minPrice = 0;
+        }
+        $qb->where('p.Price >=' . $minPrice);
+        if (!is_null($maxPrice)) {
+            $qb->andWhere('p.Price <=' . $maxPrice);
+        }
+        if (!is_null($cat)) {
+            $qb->andWhere('p.Category =' . $cat);
+        }
+        // returns an array of Product objects
+        return $qb->getQuery()->getResult();
     }
 
     //    /**

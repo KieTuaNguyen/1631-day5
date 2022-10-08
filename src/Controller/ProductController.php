@@ -22,9 +22,11 @@ class ProductController extends AbstractController
     {
         $minPrice = $request->query->get('minPrice');
         $maxPrice = $request->query->get('maxPrice');
+        $cat = $request->query->get('category');
+
         // $product = $productRepository->findAll();
         if ($minPrice && $maxPrice) {
-            $product = $productRepository->findAllPriceInRange($minPrice, $maxPrice);
+            $product = $productRepository->findAllPriceInRange($minPrice, $maxPrice, $cat);
         } else {
             $product = $productRepository->findAll();
         }
