@@ -25,14 +25,18 @@ class ProductController extends AbstractController
         $cat = $request->query->get('category');
 
         // $product = $productRepository->findAll();
-        if ($minPrice && $maxPrice) {
+        if ($minPrice || $maxPrice) {
             $product = $productRepository->findAllPriceInRange($minPrice, $maxPrice, $cat);
+        } else $product = $productRepository->findAll();
+        if (!(is_null($cat)) || empty($cat)) {
+            $selectedCat = $cat;
         } else {
-            $product = $productRepository->findAll();
+            $selectedCat = "";
         }
         // $product = $productRepository->findAllPriceInRange($minPrice, $maxPrice);
         return $this->render('product/index.html.twig', [
             'products' => $product,
+            'selectedCat' => $selectedCat,
         ]);
     }
 

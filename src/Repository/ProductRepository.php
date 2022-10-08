@@ -42,7 +42,7 @@ class ProductRepository extends ServiceEntityRepository
     /**
      * @return Product[]
      */
-    public function findAllPriceInRange(int $minPrice, int $maxPrice, int $cat): array
+    public function findAllPriceInRange($minPrice, $maxPrice, $cat): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -58,15 +58,15 @@ class ProductRepository extends ServiceEntityRepository
         // return $query->getResult();
         $qb = $entityManager->createQueryBuilder();
         $qb->select('p')
-            ->from('App\Entity\Product', 'p');
-        if (is_null($minPrice)) {
+            ->from('App:Product', 'p');
+        if (is_null($minPrice) || empty($minPrice)) {
             $minPrice = 0;
         }
         $qb->where('p.Price >=' . $minPrice);
-        if (!is_null($maxPrice)) {
+        if (!(is_null($maxPrice) || empty($maxPrice))) {
             $qb->andWhere('p.Price <=' . $maxPrice);
         }
-        if (!is_null($cat)) {
+        if (!(is_null($cat) || empty($cat))) {
             $qb->andWhere('p.Category =' . $cat);
         }
         // returns an array of Product objects

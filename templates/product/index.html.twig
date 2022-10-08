@@ -5,40 +5,52 @@
 
 {% block body %}
 	<div class="container-md">
-		<h1>Product index</h1>
-
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Name</th>
-					<th>Price</th>
-					<th>Category</th>
-					<th>actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for product in products %}
-					<tr>
-						<td>{{ product.id }}</td>
-						<td>{{ product.Name }}</td>
-						<td>{{ product.Price }}</td>
-						<td>
-							<a href="{{ path('app_category_show', {'id': product.id}) }}">{{ product.Category.Name }}</a>
-						</td>
-						<td>
-							<a href="{{ path('app_product_show', {'id': product.id}) }}">{{ product.Category.Name }}</a>
-							<a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-						</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="4">no records found</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-
-		<a href="{{ path('app_product_new') }}">Create new</a>
+		<div class="row">
+			<div class="col-3">
+				<form action={{ path('app_product_index') }} method="get">
+					Category:
+					<select name="category">
+						<option value="1" {{ (selectedCat=="1") ? 'selected' }}>
+							Drink</option>
+						<option value="2" {{ (selectedCat=="2") ? 'selected' }}>
+							Snack</option>
+						<option value="3" {{ (selectedCat=="3") ? 'selected' }}>
+							Stationary</option>
+						<option value="" {{ (selectedCat=="") ? 'selected' }}></option>
+					</option>
+				</select><br>
+				Min Price:
+				<input type="number" name="minPrice"><br>
+				Max Price:
+				<input type="number" name="maxPrice"><br>
+				<input type="submit" value="Filter" class="btn btn-primary">
+				|
+				<a href="{{ path('app_product_index') }}" class="btn btn-primary">Reset</a>
+			</form>
+		</div>
+		<div class="col-9">
+			<div class="container">
+				<h4>Product Listing</h4>
+				<div class="row row-cols-1 row-cols-md-4 g-4">
+					{% for product in products %}
+						<div class="col">
+							<div class="card h-100">
+								<img class="card-img-top" src="{{ asset('images/logo.jpg') }}">
+								<div class="card-body">
+									<h5 class="card-title">{{ product.Name }}</h5>
+									<h6 class="card-subtitle">Category:
+										{{ product.category.Name }}</h6>
+									<p>Price:
+										{{ product.price }}</p>
+								</div>
+								<div class="card-footer">
+									<a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-primary">Show</a>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
 	</div>
-{% endblock %}
+</div>{% endblock %}
