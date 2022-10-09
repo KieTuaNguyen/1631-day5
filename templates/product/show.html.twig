@@ -18,6 +18,13 @@
 					<td>{{ product.Name }}</td>
 				</tr>
 				<tr>
+					<th>Image</th>
+					<td>
+						<img src=" {{ asset('images/product/' ~ product.imgurl) }}" alt="Symfony" width="50" height="50">
+					</td>
+				</tr>
+
+				<tr>
 					<th>Price</th>
 					<td>{{ product.Price }}</td>
 				</tr>

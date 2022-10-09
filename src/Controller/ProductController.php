@@ -6,9 +6,11 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 /**
  * @Route("/product")
@@ -50,8 +52,21 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $productRepository->add($product, true);
+            $productImage = $form->get('Image')->getData();
+            if ($productImage) {
+                $originExt = pathinfo($productImage->getClientOriginalName(), PATHINFO_EXTENSION);
+                $newFilename = $product->getId() . '.' . $originExt;
 
+                try {
+                    $productImage->move(
+                        $this->getParameter('product_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                }
+                $product->setUniqueImage($newFilename);
+            }
+            $productRepository->add($product, true);
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
