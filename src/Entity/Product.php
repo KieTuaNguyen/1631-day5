@@ -47,7 +47,7 @@ class Product
         return $this->Name;
     }
 
-    public function setName(?string $Name): self
+    public function setName(string $Name): self
     {
         $this->Name = $Name;
 
@@ -83,7 +83,7 @@ class Product
         return $this->imgurl;
     }
 
-    public function setImgurl(?string $imgurl): self
+    public function setImgurl(string $imgurl): self
     {
         $this->imgurl = $imgurl;
 
