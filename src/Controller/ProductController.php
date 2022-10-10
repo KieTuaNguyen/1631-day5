@@ -64,7 +64,7 @@ class ProductController extends AbstractController
                     );
                 } catch (FileException $e) {
                 }
-                $product->setUniqueImage($newFilename);
+                $product->setImgurl($newFilename);
             }
             $productRepository->add($product, true);
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
