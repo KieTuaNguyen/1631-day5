@@ -46,16 +46,12 @@ class ProductRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
 
-        // $query = $entityManager->createQuery(
-        //     'SELECT p
-        //     FROM App\Entity\Product p
-        //     WHERE p.Category = :Category AND p.Price >= :minP AND p.Price <= :maxP
-        //     ORDER BY p.Price ASC'
-        // )->setParameter('minP', $minPrice)
-        //     ->setParameter('maxP', $maxPrice)
-        //     ->setParameter('Category', $cat);
-        // returns an array of Product objects
-        // return $query->getResult();
+        $query = $entityManager->createQuery(
+            'SELECT p
+             FROM App\Entity\Product p'
+        );
+        //returns an array of Product objects
+        return $query->getResult();
         $qb = $entityManager->createQueryBuilder();
         $qb->select('p')
             ->from('App:Product', 'p');

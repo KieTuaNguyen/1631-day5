@@ -18,27 +18,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/", name="app_product_index", methods={"GET"})
+     * @Route("/{pageId}", name="app_product_index", methods={"GET"})
      */
-    public function index(Request $request, ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, Request $request, int $pageId = 1): Response
     {
         $minPrice = $request->query->get('minPrice');
         $maxPrice = $request->query->get('maxPrice');
         $cat = $request->query->get('category');
+        $this->filterRequestQuery($minPrice, $maxPrice, $cat);
 
-        // $product = $productRepository->findAll();
-        if ($minPrice || $maxPrice) {
-            $product = $productRepository->findAllPriceInRange($minPrice, $maxPrice, $cat);
-        } else $product = $productRepository->findAll();
-        if (!(is_null($cat)) || empty($cat)) {
-            $selectedCat = $cat;
-        } else {
-            $selectedCat = "";
-        }
-        // $product = $productRepository->findAllPriceInRange($minPrice, $maxPrice);
+        if ($minPrice == NULL && $maxPrice == NULL && $cat == NULL)
+            $products = $productRepository->findAll();
+        else
+            $products = $productRepository->findAllPriceInRange($minPrice, $maxPrice, $cat);
+
+        $numOfItems = count($products);   // total number of items satisfied above query
+        $itemsPerPage = 8; // number of items shown each page
+        $products = array_slice($products, $itemsPerPage * ($pageId - 1), $itemsPerPage);
         return $this->render('product/index.html.twig', [
-            'products' => $product,
-            'selectedCat' => $selectedCat,
+            'products' => $products,
+            'numOfPages' => ceil($numOfItems / $itemsPerPage)
         ]);
     }
 
