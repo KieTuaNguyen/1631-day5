@@ -20,13 +20,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/{pageId}", name="app_product_index", methods={"GET"})
+     * @Route("/listing/{pageId}", name="app_product_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository,
-                          Request $request,
-                          CategoryRepository $categoryRepository,
-                          int $pageId = 1): Response
-    {
+    public function index(
+        ProductRepository $productRepository,
+        Request $request,
+        CategoryRepository $categoryRepository,
+        int $pageId = 1
+    ): Response {
         $minPrice = $request->query->get('minPrice');
         $maxPrice = $request->query->get('maxPrice');
         $cat = $request->query->get('category');
@@ -61,7 +62,8 @@ class ProductController extends AbstractController
             'products' => $tempQuery->getResult(),
             'selectedCat' => $selectedCat,
             'categories' => $categoryRepository->findAll(),
-            'numOfPages' => $numOfPages
+            'numOfPages' => $numOfPages,
+            'totalItems' => $totalItems,
         ]);
     }
 
@@ -78,6 +80,7 @@ class ProductController extends AbstractController
             $productImage = $form->get('Image')->getData();
             if ($productImage) {
                 $originExt = pathinfo($productImage->getClientOriginalName(), PATHINFO_EXTENSION);
+                $productRepository->add($product, true);
                 $newFilename = $product->getId() . '.' . $originExt;
 
                 try {
@@ -89,7 +92,6 @@ class ProductController extends AbstractController
                 }
                 $product->setImgurl($newFilename);
             }
-            $productRepository->add($product, true);
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
