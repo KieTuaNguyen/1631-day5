@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,19 +40,9 @@ class ProductRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @return Product[]
-     */
-    public function findAllPriceInRange($minPrice, $maxPrice, $cat): array
+    public function findMore($minPrice, $maxPrice, $cat): Query
     {
         $entityManager = $this->getEntityManager();
-
-        $query = $entityManager->createQuery(
-            'SELECT p
-             FROM App\Entity\Product p'
-        );
-        //returns an array of Product objects
-        return $query->getResult();
         $qb = $entityManager->createQueryBuilder();
         $qb->select('p')
             ->from('App:Product', 'p');
@@ -66,7 +57,7 @@ class ProductRepository extends ServiceEntityRepository
             $qb->andWhere('p.Category =' . $cat);
         }
         // returns an array of Product objects
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery();
     }
 
     //    /**

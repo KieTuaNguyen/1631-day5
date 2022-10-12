@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,24 +22,46 @@ class ProductController extends AbstractController
     /**
      * @Route("/{pageId}", name="app_product_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository, Request $request, int $pageId = 1): Response
+    public function index(ProductRepository $productRepository,
+                          Request $request,
+                          CategoryRepository $categoryRepository,
+                          int $pageId = 1): Response
     {
         $minPrice = $request->query->get('minPrice');
         $maxPrice = $request->query->get('maxPrice');
         $cat = $request->query->get('category');
-        $this->filterRequestQuery($minPrice, $maxPrice, $cat);
+        // $product = $productRepository->findAll();
+        if ($minPrice || $maxPrice) {
+            $product = $productRepository->findMore($minPrice, $maxPrice, $cat);
+        } else $product = $productRepository->findAll();
+        if (!(is_null($cat)) || empty($cat)) {
+            $selectedCat = $cat;
+        } else {
+            $selectedCat = "";
+        }
+        $tempQuery = $productRepository->findMore($minPrice, $maxPrice, $cat);
+        $pageSize = 3;
 
-        if ($minPrice == NULL && $maxPrice == NULL && $cat == NULL)
-            $products = $productRepository->findAll();
-        else
-            $products = $productRepository->findAllPriceInRange($minPrice, $maxPrice, $cat);
+        // load doctrine Paginator
+        $paginator = new Paginator($tempQuery);
 
-        $numOfItems = count($products);   // total number of items satisfied above query
-        $itemsPerPage = 8; // number of items shown each page
-        $products = array_slice($products, $itemsPerPage * ($pageId - 1), $itemsPerPage);
+        // you can get total items
+        $totalItems = count($paginator);
+
+        // get total pages
+        $numOfPages = ceil($totalItems / $pageSize);
+
+        // now get one page's items:
+        $tempQuery = $paginator
+            ->getQuery()
+            ->setFirstResult($pageSize * ($pageId - 1)) // set the offset
+            ->setMaxResults($pageSize); // set the limit
+
         return $this->render('product/index.html.twig', [
-            'products' => $products,
-            'numOfPages' => ceil($numOfItems / $itemsPerPage)
+            'products' => $tempQuery->getResult(),
+            'selectedCat' => $selectedCat,
+            'categories' => $categoryRepository->findAll(),
+            'numOfPages' => $numOfPages
         ]);
     }
 
@@ -130,4 +154,12 @@ class ProductController extends AbstractController
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
+    // private function filterRequestQuery($minPrice, $maxPrice, $cat)
+    // {
+    //     return [
+    //         is_numeric($minPrice) ? (float) $minPrice : NULL,
+    //         is_numeric($maxPrice) ? (float) $maxPrice : NULL,
+    //         is_numeric($cat) ? (float) $cat : NULL
+    //     ];
+    // }
 }
