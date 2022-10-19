@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2022 at 09:47 AM
+-- Generation Time: Oct 19, 2022 at 07:50 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -64,7 +64,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20221008155550', '2022-10-08 17:55:56', 71),
 ('DoctrineMigrations\\Version20221010051431', '2022-10-10 07:14:41', 44),
 ('DoctrineMigrations\\Version20221010052351', '2022-10-10 07:23:57', 77),
-('DoctrineMigrations\\Version20221019061613', '2022-10-19 08:16:58', 53);
+('DoctrineMigrations\\Version20221019061613', '2022-10-19 08:16:58', 53),
+('DoctrineMigrations\\Version20221019084601', '2022-10-19 10:46:13', 460);
 
 -- --------------------------------------------------------
 
@@ -77,28 +78,21 @@ CREATE TABLE `product` (
   `category_id` int(11) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` double NOT NULL,
-  `imgurl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `imgurl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `owner_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `category_id`, `name`, `price`, `imgurl`) VALUES
-(1, 1, 'C2', 10, NULL),
-(2, 1, 'C23', 20, NULL),
-(3, 2, 'Lays', 50, NULL),
-(4, 2, 'Sample Product', 18, NULL),
-(5, 1, 'Nuoc Hoa', 28, '.jpg'),
-(7, 1, 'Sample Product 2', 18, '.jfif'),
-(8, 1, 'Sample Product 3', 18, '.png'),
-(9, 1, 'Sample Product 4', 24, '.jpg'),
-(10, 1, 'Sample Product 5', 26, '.png'),
-(11, 1, 'Sample Product 6', 16, '.jpg'),
-(12, 2, 'Sample Product 7', 6, NULL),
-(13, 2, 'Sample Product 8', 2, NULL),
-(14, 1, 'Sample Product 9', 9, NULL),
-(15, 3, 'Kiet dep trai', 165, NULL);
+INSERT INTO `product` (`id`, `category_id`, `name`, `price`, `imgurl`, `owner_id`) VALUES
+(20, 3, 'Tao', 28, '20.jpg', 2),
+(21, 1, 'Nuoc hoa', 18, '21.jpg', 2),
+(22, 1, 'C2', 16, '22.jpg', 2),
+(23, 1, 'Nuoc hoa', 14, '23.jpg', 2),
+(24, 2, 'Lays', 49, '24.jpg', 2),
+(25, 2, 'Lays', 63, '25.jfif', 2);
 
 -- --------------------------------------------------------
 
@@ -118,7 +112,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `roles`, `password`) VALUES
-(1, 'tester@gmail.com', '[]', '$2y$13$nuzGy89NMT9D/oOhDSa17O8leOR5YS9XDRpt/fhdDGDOM4tJzR3hO');
+(1, 'tester@gmail.com', '[]', '$2y$13$nuzGy89NMT9D/oOhDSa17O8leOR5YS9XDRpt/fhdDGDOM4tJzR3hO'),
+(2, 'admin@gmail.com', '[]', '$2y$13$CMb7UH3psL8NEDBWydxt6.5tkXquJGQFsRIsLBUkPQeyejl8aKHOC');
 
 --
 -- Indexes for dumped tables
@@ -141,7 +136,8 @@ ALTER TABLE `doctrine_migration_versions`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_D34A04AD12469DE2` (`category_id`);
+  ADD KEY `IDX_D34A04AD12469DE2` (`category_id`),
+  ADD KEY `IDX_D34A04AD7E3C61F9` (`owner_id`);
 
 --
 -- Indexes for table `user`
@@ -164,13 +160,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -180,7 +176,8 @@ ALTER TABLE `user`
 -- Constraints for table `product`
 --
 ALTER TABLE `product`
-  ADD CONSTRAINT `FK_D34A04AD12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+  ADD CONSTRAINT `FK_D34A04AD12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD7E3C61F9` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
