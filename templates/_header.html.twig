@@ -1,17 +1,20 @@
 <div class="container">
 	<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-		<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+		<a href="{{ path('app_product_index') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
 			<span class="fs-4"><img src="{{ asset('images/product/logo.png') }}" width="150">
 			</span>
 		</a>
 
 		<ul class="nav nav-pills">
+			{% if app.user %}
+				<li class="nav-item">
+					<a class="btn btn-outline-secondary">{{ app.user.email }}</a>
+				</li>
+			{% endif %}
 			<li class="nav-item">
-				<a href="#" class="btn btn-warning" aria-current="page">Home</a>
-			</li>
-			<li class="nav-item">
-				<a href="#" class="btn btn-light">About</a>
-
+				<a class="btn btn-outline-warning" href="/{{ app.user ? 'logout' : 'login' }}" class="nav-link">
+					{{ app.user ? 'Log Out' : 'Log In' }}
+				</a>
 			</li>
 		</ul>
 	</header>
