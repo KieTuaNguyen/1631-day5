@@ -105,8 +105,6 @@ class ProductController extends AbstractController
         ]);
     }
 
-    //create a function which show all product in price range
-
     /**
      * @Route("/phepcong", name="app_product_plus", methods={"GET", "POST"})
      */
@@ -128,7 +126,6 @@ class ProductController extends AbstractController
             'product' => $product,
         ]);
     }
-    //
 
     /**
      * @Route("/{id}/edit", name="app_product_edit", methods={"GET", "POST"})
