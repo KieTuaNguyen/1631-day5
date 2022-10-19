@@ -75,6 +75,9 @@ class ProductController extends AbstractController
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        $user = $this->getUser();
+        $product->setOwner($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $productImage = $form->get('Image')->getData();
@@ -91,6 +94,7 @@ class ProductController extends AbstractController
                 } catch (FileException $e) {
                 }
                 $product->setImgurl($newFilename);
+                $productRepository->add($product, true);
             }
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }

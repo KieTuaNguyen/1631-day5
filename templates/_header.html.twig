@@ -16,8 +16,7 @@
 					{{ app.user ? 'Log Out' : 'Log In' }}
 				</a>
 				<a class="btn btn-outline-warning" href="/register" class="nav-link">
-					{% if app.user %}
-						Register
+					{% if app.user %}Register
 					{% endif %}
 					{{ app.user ? '' : 'Register' }}
 				</a>
