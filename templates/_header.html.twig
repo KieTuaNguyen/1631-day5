@@ -15,6 +15,12 @@
 				<a class="btn btn-outline-warning" href="/{{ app.user ? 'logout' : 'login' }}" class="nav-link">
 					{{ app.user ? 'Log Out' : 'Log In' }}
 				</a>
+				<a class="btn btn-outline-warning" href="/register" class="nav-link">
+					{% if app.user %}
+						Register
+					{% endif %}
+					{{ app.user ? '' : 'Register' }}
+				</a>
 			</li>
 		</ul>
 	</header>

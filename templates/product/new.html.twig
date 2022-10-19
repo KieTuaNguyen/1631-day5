@@ -1,11 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Product{% endblock %}
+{% block title %}
+	Not Found
+	{% if app.user %}
+		New Product
+	{% endif %}
+{% endblock %}
+
 
 {% block body %}
-    <h1>Create new Product</h1>
+	<div class="container-md">
+		<h1>Page not found</h1>
+		<p>
+			The requested page couldn't be located. Checkout for any URL misspelling or
+			<a href="{{ path('app_product_index') }}">Return to the homepage</a>.
+		</p>
 
-    {{ include('product/_form.html.twig') }}
+		{% if app.user %}
+			<h1>Create new Product</h1>
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+			{{ include('product/_form.html.twig') }}
+
+			<a class="btn btn-outline-warning" href="{{ path('app_product_index') }}">Back to list</a>
+
+		{% endif %}
+	</div>
 {% endblock %}

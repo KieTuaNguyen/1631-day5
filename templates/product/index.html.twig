@@ -26,8 +26,10 @@
 				<input type="submit" value="Filter" class="btn btn-warning">
 				|
 				<a href="{{ path('app_product_index') }}" class="btn btn-warning">Reset</a>
-				|
-				<a href="{{ path('app_product_new') }}" class="btn btn-warning">Create new</a>
+				{% if app.user %}
+					|
+					<a href="{{ path('app_product_new') }}" class="btn btn-warning">Create new</a>
+				{% endif %}
 			</form>
 		</div>
 		<div class="col-9">
