@@ -7,27 +7,15 @@
 	<div class="container-md">
 		<div class="row">
 			<div class="col-3">
-				<form
-					action={{ path('app_product_index') }} method="get">
-					{# Category cach thu cong:
-										<select name="category">
-											<option value="1" {{ (selectedCat=="1") ? 'selected' }}>
-												Drink</option>
-											<option value="2" {{ (selectedCat=="2") ? 'selected' }}>
-												Snack</option>
-											<option value="3" {{ (selectedCat=="3") ? 'selected' }}>
-												Stationary</option>
-											<option value="" {{ (selectedCat=="") ? 'selected' }}>All</option>
-										</option>
-									</select><br>
-									Category xuat tu dong cach1:
-									<select name="category">
-										<option value="">All</option>
-										{% for category in categories %}
-											<option value="{{ category.id }}" {{ (selectedCat==category.id) ? 'selected' }}>
-												{{ category.name }}</option>
-										{% endfor %}
-									</select><br> #}
+				<form action={{ path('app_product_index') }} method="get">
+					Category xuat tu dong cach1:
+					<select name="category">
+						<option value="">All</option>
+						{% for category in categories %}
+							<option value="{{ category.id }}" {{ (selectedCat==category.id) ? 'selected' }}>
+								{{ category.name }}</option>
+						{% endfor %}
+					</select><br>
 					Category:
 					<br>
 					<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index') }}">
