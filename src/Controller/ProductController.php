@@ -128,6 +128,7 @@ class ProductController extends AbstractController
             'product' => $product,
         ]);
     }
+    //
 
     /**
      * @Route("/{id}/edit", name="app_product_edit", methods={"GET", "POST"})
