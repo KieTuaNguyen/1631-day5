@@ -136,7 +136,11 @@ class ProductController extends AbstractController
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
+        if ($user != $product->getOwner()) {
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $productRepository->add($product, true);
 
