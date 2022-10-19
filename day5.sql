@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2022 at 01:50 PM
+-- Generation Time: Oct 19, 2022 at 09:47 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -63,7 +63,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20221005064237', '2022-10-05 08:43:00', 96),
 ('DoctrineMigrations\\Version20221008155550', '2022-10-08 17:55:56', 71),
 ('DoctrineMigrations\\Version20221010051431', '2022-10-10 07:14:41', 44),
-('DoctrineMigrations\\Version20221010052351', '2022-10-10 07:23:57', 77);
+('DoctrineMigrations\\Version20221010052351', '2022-10-10 07:23:57', 77),
+('DoctrineMigrations\\Version20221019061613', '2022-10-19 08:16:58', 53);
 
 -- --------------------------------------------------------
 
@@ -99,6 +100,26 @@ INSERT INTO `product` (`id`, `category_id`, `name`, `price`, `imgurl`) VALUES
 (14, 1, 'Sample Product 9', 9, NULL),
 (15, 3, 'Kiet dep trai', 165, NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `roles` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '(DC2Type:json)',
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `roles`, `password`) VALUES
+(1, 'tester@gmail.com', '[]', '$2y$13$nuzGy89NMT9D/oOhDSa17O8leOR5YS9XDRpt/fhdDGDOM4tJzR3hO');
+
 --
 -- Indexes for dumped tables
 --
@@ -123,6 +144,13 @@ ALTER TABLE `product`
   ADD KEY `IDX_D34A04AD12469DE2` (`category_id`);
 
 --
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -137,6 +165,12 @@ ALTER TABLE `category`
 --
 ALTER TABLE `product`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
