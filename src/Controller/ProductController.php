@@ -31,6 +31,7 @@ class ProductController extends AbstractController
         $minPrice = $request->query->get('minPrice');
         $maxPrice = $request->query->get('maxPrice');
         $cat = $request->query->get('category');
+        $selectedCat = $categoryRepository->findAll($cat);
         // $product = $productRepository->findAll();
         if ($minPrice || $maxPrice) {
             $product = $productRepository->findMore($minPrice, $maxPrice, $cat);
@@ -120,10 +121,17 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}", name="app_product_show", methods={"GET"})
      */
-    public function show(Product $product): Response
-    {
+    public function show(
+        Product $product,
+        Request $request,
+        CategoryRepository $categoryRepository
+    ): Response {
+        $cat = $request->query->get('category');
+        $selectedCat = $categoryRepository->findAll($cat);
         return $this->render('product/show.html.twig', [
             'product' => $product,
+            'selectedCat' => $selectedCat,
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
 

@@ -21,8 +21,8 @@
 					<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index') }}">
 						All</a><br>
 					{% for category in categories %}
-						<a style="text-decoration:none; color:grey;" value="{{ category.id }}" {{ (selectedCat==category.id) ? 'selected' }} href="{{ path('app_product_show', {'id': category.id}) }}">
-							{{ category.name }}<br></a>
+						<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index', {'category':category.Id}) }}">{{ category.Name }}
+							<br></a>
 					{% endfor %}
 
 
