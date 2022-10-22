@@ -7,16 +7,17 @@
 	<div class="container-md">
 		<div class="row">
 			<div class="col-3">
-				<form action={{ path('app_product_index') }} method="get">
-					Category xuat tu dong cach1:
-					<select name="category">
-						<option value="">All</option>
-						{% for category in categories %}
-							<option value="{{ category.id }}" {{ (selectedCat==category.id) ? 'selected' }}>
-								{{ category.name }}</option>
-						{% endfor %}
-					</select><br>
-					Category xuat tu dong cach2:
+				<form
+					action={{ path('app_product_index') }} method="get">
+					{# Category xuat tu dong cach1:
+																																																																						<select name="category">
+																																																																							<option value="">All</option>
+																																																																							{% for category in categories %}
+																																																																								<option value="{{ category.id }}" {{ (selectedCat==category.id) ? 'selected' }}>
+																																																																									{{ category.name }}</option>
+																																																																							{% endfor %}
+																																																																						</select><br> #}
+					Category{#xuat tu dong cach2#}:
 					<br>
 					<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index') }}">
 						All</a><br>
@@ -41,7 +42,10 @@
 			</div>
 			<div class="col-9">
 				<div class="container">
-					<h4>Product Listing</h4>
+					{% if app.user %}
+						<h4>Welcome
+							{{  app.user.firstname }}</h4>
+					{% endif %}
 					<div class="row row-cols-1 row-cols-md-4 g-4">
 						{% for product in products %}
 							<div class="col">
@@ -74,14 +78,14 @@
 								<a class="page-link" href={{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'pageId': i} )) }}>{{ i }}</a>
 							</li>
 						{% endfor %}
-						<a class="btn btn-outline-secondary">Total product:
-							{{totalItems}}
-							and page
-							{{ app.request.get('pageId') }}
-							of
-							{{ numOfPages }}<a/>
-						</ul>
-					</nav>
-				</div>
+						{# <a class="btn btn-outline-secondary">Total product:
+																																																																															{{totalItems}}
+																																																																															and page
+																																																																															{{ app.request.get('pageId') }}
+																																																																															of
+																																																																															{{ numOfPages }}<a/> #}
+					</ul>
+				</nav>
 			</div>
-		{% endblock %}
+		</div>
+	{% endblock %}

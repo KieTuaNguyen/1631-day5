@@ -4,10 +4,13 @@
 	<div class="container-md col-md-4 col-md-offset-4">
 		<h1>Register</h1>
 		{{ form_start(registrationForm, { 'attr' : { 'class': 'form-control' } }) }}
+		{{ form_row(registrationForm.lastname) }}
+		{{ form_row(registrationForm.firstname) }}
 		{{ form_row(registrationForm.email) }}
 		{{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
+		{{ form_row(registrationForm.role)}}
 		{{ form_row(registrationForm.agreeTerms) }}
 		<button type="submit" class="btn btn-warning">Register</button>
 

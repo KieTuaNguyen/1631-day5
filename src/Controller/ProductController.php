@@ -33,6 +33,34 @@ class ProductController extends AbstractController
         $cat = $request->query->get('category');
         $selectedCat = $categoryRepository->findAll($cat);
         // $product = $productRepository->findAll();
+        // // $this->denyAccessUnlessGranted('ROLE_USER');
+        // $hasAccess = $this->isGranted('ROLE_USER');
+        // $tempQuery = $productRepository->findMore($minPrice, $maxPrice, $cat);
+        // $pageSize = 3;
+        // $paginator = new Paginator($tempQuery);
+        // // you can get total items
+        // $totalItems = count($paginator);
+        // // get total pages
+        // $numOfPages = ceil($totalItems / $pageSize);
+        // if ($hasAccess) {
+        //     return $this->render('product/index.html.twig', [
+        //         'products' => $productRepository->findAll(),
+        //         'selectedCat' => $selectedCat,
+        //         'categories' => $categoryRepository->findAll(),
+        //         'numOfPages' => $numOfPages,
+        //         'totalItems' => $totalItems,
+        //     ]);
+        // } else {
+        //     return $this->render('product/index.html.twig', [
+        //         'products' => [],
+        //         'categories' => $categoryRepository->findAll(),
+        //         'selectedCat' => $selectedCat,
+        //         'categories' => $categoryRepository->findAll(),
+        //         'numOfPages' => $numOfPages,
+        //         'totalItems' => $totalItems,
+        //     ]);
+        // }
+
         if ($minPrice || $maxPrice) {
             $product = $productRepository->findMore($minPrice, $maxPrice, $cat);
         } else $product = $productRepository->findAll();
@@ -46,18 +74,15 @@ class ProductController extends AbstractController
 
         // load doctrine Paginator
         $paginator = new Paginator($tempQuery);
-
         // you can get total items
         $totalItems = count($paginator);
-
         // get total pages
         $numOfPages = ceil($totalItems / $pageSize);
-
         // now get one page's items:
         $tempQuery = $paginator
             ->getQuery()
             ->setFirstResult($pageSize * ($pageId - 1)) // set the offset
-            ->setMaxResults($pageSize); // set the limit
+            ->setMaxResults($pageSize); // set the limit 
 
         return $this->render('product/index.html.twig', [
             'products' => $tempQuery->getResult(),

@@ -60,6 +60,17 @@ class ProductRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
+    public function FindByOwner($id): Query
+    {
+        $entityManager = $this->getEntityManager();
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('p')
+            ->from('App:Product', 'p')
+            ->where('p.Owner =' . $id);
+        // returns an array of Product objects
+        return $qb->getQuery();
+    }
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */
