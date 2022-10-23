@@ -31,6 +31,7 @@ class ProductController extends AbstractController
         $minPrice = $request->query->get('minPrice');
         $maxPrice = $request->query->get('maxPrice');
         $cat = $request->query->get('category');
+        $search = $request->query->get('search');
         $selectedCat = $categoryRepository->findAll($cat);
         // $product = $productRepository->findAll();
         // // $this->denyAccessUnlessGranted('ROLE_USER');
@@ -62,14 +63,14 @@ class ProductController extends AbstractController
         // }
 
         if ($minPrice || $maxPrice) {
-            $product = $productRepository->findMore($minPrice, $maxPrice, $cat);
+            $product = $productRepository->findMore($minPrice, $maxPrice, $cat, $search);
         } else $product = $productRepository->findAll();
         if (!(is_null($cat)) || empty($cat)) {
             $selectedCat = $cat;
         } else {
             $selectedCat = "";
         }
-        $tempQuery = $productRepository->findMore($minPrice, $maxPrice, $cat);
+        $tempQuery = $productRepository->findMore($minPrice, $maxPrice, $cat, $search);
         $pageSize = 3;
 
         // load doctrine Paginator
@@ -90,6 +91,7 @@ class ProductController extends AbstractController
             'categories' => $categoryRepository->findAll(),
             'numOfPages' => $numOfPages,
             'totalItems' => $totalItems,
+            'search' => $search,
         ]);
     }
 

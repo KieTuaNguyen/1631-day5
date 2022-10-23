@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Product index
+{% block title %}Product Index
 {% endblock %}
 
 {% block body %}
@@ -10,56 +9,63 @@
 				<form
 					action={{ path('app_product_index') }} method="get">
 					{# Category xuat tu dong cach1:
-																																																																						<select name="category">
-																																																																							<option value="">All</option>
-																																																																							{% for category in categories %}
-																																																																								<option value="{{ category.id }}" {{ (selectedCat==category.id) ? 'selected' }}>
-																																																																									{{ category.name }}</option>
-																																																																							{% endfor %}
-																																																																						</select><br> #}
-					Category{#xuat tu dong cach2#}:
-					<br>
-					<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index') }}">
-						All</a><br>
-					{% for category in categories %}
-						<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index', {'category':category.Id}) }}">{{ category.Name }}
-							<br></a>
-					{% endfor %}
+																				<select name="category">
+																					<option value="">All</option>
+																					{% for category in categories %}
+																						<option value="{{ category.id }}" {{ (selectedCat==category.id) ? 'selected' }}>
+																							{{ category.name }}</option>
+																					{% endfor %}
+																				</select><br>
+																				Category xuat tu dong cach2:
+																				<br>
+																				<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index') }}">
+																					All</a><br>
+																				{% for category in categories %}
+																					<a style="text-decoration:none; color:grey;" href="{{ path('app_product_index', {'category':category.Id}) }}">{{ category.Name }}
+																						<br></a>
+																				{% endfor %} #}
+					<h3 class="fw-bold mb-0 fs-4">Category</h3>
+					<div class="list-group w-auto" style="margin: 15px 0px 15px 15px;">
+						{% for category in categories %}
+							<a href="{{ path('app_product_index', {'category':category.Id}) }}" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+								<div class="d-flex gap-2 w-100 justify-content-between">
+									<div>
+										<h6 class="mb-0">{{ category.Name }}</h6>
+										<p class="mb-0 opacity-75" style="white-space: nowrap; min-width:200px; max-width: 248px; overflow: hidden; text-overflow: ellipsis;">{{ category.Description }}</p>
+									</div>
+									{# <small class="opacity-50 text-nowrap">{{totalItems}}</small> #}
+								</div>
+							</a>
+						{% endfor %}
+					</div>
 
-
-					Min Price:
-					<input type="number" name="minPrice"><br>
-					Max Price:
-					<input type="number" name="maxPrice"><br>
-					<input type="submit" value="Filter" class="btn btn-warning">
-					|
-					<a href="{{ path('app_product_index') }}" class="btn btn-warning">Reset</a>
-					{% if app.user %}
-						|
-						<a href="{{ path('app_product_new') }}" class="btn btn-warning">Create new</a>
-					{% endif %}
+					<h3 class="fw-bold mb-0 fs-4">Filter</h3>
+					<div class="list-group w-auto" style="margin: 15px 0px 5px 15px;">
+						<input type="number" name="minPrice" placeholder="Minimum price" style="border-radius: 7px; margin: 0px 0px 5px 0px;">
+						<input type="number" name="maxPrice" placeholder="Maximum price" style="border-radius: 7px;">
+					</div>
+					<input type="submit" value="Filter" class="btn btn-dark" style="margin: 0px 15px">
 				</form>
 			</div>
-			<div class="col-9">
-				<div class="container">
-					{% if app.user %}
-						<h4>Welcome
-							{{  app.user.firstname }}</h4>
-					{% endif %}
-					<div class="row row-cols-1 row-cols-md-4 g-4">
+
+			<div class="col-7" style=" margin-left: auto; margin-right: auto;">
+
+				<div class="container" style="margin-left: auto; margin-right: auto;">
+					<div class="row row-cols-1 row-cols-md-3 g-3">
 						{% for product in products %}
 							<div class="col">
-								<div class="card h-100">
-									<img src=" {{ asset('images/product/' ~ product.imgurl) }}" class="card-img-top" alt="Symfony">
+								<div class="card">
+
+									<img src=" {{ asset('images/product/' ~ product.imgurl) }}" class="card-img-top" alt="BOOKWORM" style="height: 335px;">
+
 									<div class="card-body">
-										<h5 class="card-title">{{ product.Name }}</h5>
-										<h6 class="card-subtitle">Category:
-											{{ product.category.Name }}</h6>
-										<p>Price:
-											{{ product.price }}</p>
+										<p style="color: #00205b; font-size: 18px; font-weight: 400; text-align: center; overflow: hidden; text-overflow: ellipsis;">{{ product.Name }}</p>
+										<p style="color: gray; font-size: 16px; font-weight: 400; text-align: center; margin-bottom: 0rem;">
+											{{ product.category.Name }}</p>
+										<p style="font-size: 17px; color: #00205b;">${{ product.price }}</p>
 									</div>
 									<div class="card-footer">
-										<a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-warning">Show</a>
+										<a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-dark">Show</a>
 									</div>
 								</div>
 							</div>
@@ -79,11 +85,11 @@
 							</li>
 						{% endfor %}
 						{# <a class="btn btn-outline-secondary">Total product:
-																																																																															{{totalItems}}
-																																																																															and page
-																																																																															{{ app.request.get('pageId') }}
-																																																																															of
-																																																																															{{ numOfPages }}<a/> #}
+																			{{totalItems}}
+																			and page
+																			{{ app.request.get('pageId') }}
+																			of
+																			{{ numOfPages }}<a/> #}
 					</ul>
 				</nav>
 			</div>

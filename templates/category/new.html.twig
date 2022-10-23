@@ -1,11 +1,15 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}New Category{% endblock %}
+{% extends 'base-without-nav.html.twig' %}
+{% block title %}New Category - BOOKWORM
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Category</h1>
+	{% if app.user %}
+		<div class="container">
+			<h1>Create new Category</h1>
 
-    {{ include('category/_form.html.twig') }}
+			{{ include('category/_form.html.twig') }}
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
+			<a class="btn btn-dark" href="{{ path('app_category_index') }}">Back to category list</a>
+		</div>
+	{% endif %}
 {% endblock %}

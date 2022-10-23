@@ -40,7 +40,7 @@ class ProductRepository extends ServiceEntityRepository
         }
     }
 
-    public function findMore($minPrice, $maxPrice, $cat): Query
+    public function findMore($minPrice, $maxPrice, $cat, $search): Query
     {
         $entityManager = $this->getEntityManager();
         $qb = $entityManager->createQueryBuilder();
@@ -55,6 +55,10 @@ class ProductRepository extends ServiceEntityRepository
         }
         if (!(is_null($cat) || empty($cat))) {
             $qb->andWhere('p.Category =' . $cat);
+        }
+        if (!(is_null($search) || empty($search))) {
+            $qb->andWhere('p.Name LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
         }
         // returns an array of Product objects
         return $qb->getQuery();
