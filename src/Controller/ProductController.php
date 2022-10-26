@@ -103,7 +103,7 @@ class ProductController extends AbstractController
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('ROLE_SELLER');
         $user = $this->getUser();
         $product->setOwner($user);
 
@@ -130,6 +130,21 @@ class ProductController extends AbstractController
         return $this->renderForm('product/new.html.twig', [
             'product' => $product,
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/dashboard", name="app_dashboard", methods={"GET", "POST"})
+     */
+    public function dashboard(ProductRepository $productRepository): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        $myProducts = $productRepository->findByPublisher([$user->getId()]);
+        $myProducts = $user->getProducts();
+        return $this->render('product/index', [
+            'product' => $myProducts,
         ]);
     }
 
@@ -175,6 +190,9 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+            $product->setPublisher($user);
             $productRepository->add($product, true);
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);

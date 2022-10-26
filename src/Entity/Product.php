@@ -42,6 +42,11 @@ class Product
      */
     private $Owner;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="product")
+     */
+    private $Publisher;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Product
     public function setOwner(?User $Owner): self
     {
         $this->Owner = $Owner;
+
+        return $this;
+    }
+
+    public function getPublisher(): ?User
+    {
+        return $this->Publisher;
+    }
+
+    public function setPublisher(?User $Publisher): self
+    {
+        $this->Publisher = $Publisher;
 
         return $this;
     }
